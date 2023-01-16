@@ -30,10 +30,11 @@ const Navigation = () => {
 
 
   return (
-    <AppBar position='fixed'>
-      <Container maxWidth='xl'>
+    <AppBar position='static'>
+      <Container maxWidth='xxl'>
       <Toolbar>
-        <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+        <Box sx={{ display: { xs: 'none', md: 'flex' }}}>
+        <AdbIcon />
         <Typography
           variant="h6"
           noWrap
@@ -41,16 +42,17 @@ const Navigation = () => {
           href="/"
           sx={{
             mr: 2,
-            display: { xs: 'none', md: 'flex' },
+            ml: 1,
             fontFamily: 'monospace',
             fontWeight: 700,
             letterSpacing: '.3rem',
             color: 'inherit',
             textDecoration: 'none',
           }}
-        >
+          >
           LOGO
         </Typography>
+        </Box>
 
         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
           <IconButton
