@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // import from MUI
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Tooltip, MenuItem } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 
 const settings = ['Projects', 'Logout'];
