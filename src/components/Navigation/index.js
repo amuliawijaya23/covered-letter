@@ -1,39 +1,27 @@
 import { useState } from 'react';
 
 // import from MUI
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 
-const pages = ['Projects', 'New'];
-const settings = ['Profile', 'Logout'];
+const settings = ['Projects', 'Logout'];
 
 const Navigation = () => {
-  const [ userAnchor, setUserAnchor ] = useState(false);
   const [ menuAnchor, setMenuAnchor ] = useState(null);
 
-  const handleOpenNavMenu = (event) => {
+  const handleOpenUserMenu = (event) => {
     setMenuAnchor(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseUserMenu = () => {
     setMenuAnchor(null);
   };
 
-  const handleOpenUserMenu = (event) => {
-    setUserAnchor(event.currentTarget);
-  };
-
-  const handleCloseUserMenu = () => {
-    setUserAnchor(null);
-  };
-
-
   return (
     <AppBar position='static'>
-      <Container maxWidth='xxl'>
-        <Toolbar>
-          <Box sx={{ display: { xs: 'none', md: 'flex' }}}>
+      <Container maxWidth='xxl' sx={{ p: 0.5}}>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }} >
+          <Box sx={{ display: 'flex' }}>
             <AdbIcon />
             <Typography
               variant="h6"
@@ -41,6 +29,7 @@ const Navigation = () => {
               component="a"
               href="/"
               sx={{
+                display: { xs: 'none', md: 'flex'},
                 mr: 2,
                 ml: 1,
                 fontFamily: 'monospace',
@@ -53,53 +42,6 @@ const Navigation = () => {
               COVERED LETTER
             </Typography>
           </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={menuAnchor}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(menuAnchor)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -109,7 +51,7 @@ const Navigation = () => {
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
-              anchorEl={userAnchor}
+              anchorEl={menuAnchor}
               anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'right',
@@ -119,7 +61,7 @@ const Navigation = () => {
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              open={Boolean(userAnchor)}
+              open={Boolean(menuAnchor)}
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
