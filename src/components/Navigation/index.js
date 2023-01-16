@@ -5,8 +5,8 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, 
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Projects', 'New'];
+const settings = ['Profile', 'Logout'];
 
 const Navigation = () => {
   const [ userAnchor, setUserAnchor ] = useState(false);
@@ -50,7 +50,7 @@ const Navigation = () => {
                 textDecoration: 'none',
               }}
             >
-              LOGO
+              COVERED LETTER
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -87,27 +87,7 @@ const Navigation = () => {
               ))}
             </Menu>
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <AdbIcon  />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href=""
-              sx={{
-                mr: 2,
-                ml: 1,
-                flexGrow: 1,
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
-            >
-              LOGO
-            </Typography>
-          </Box>
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
@@ -119,6 +99,7 @@ const Navigation = () => {
               </Button>
             ))}
           </Box>
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
