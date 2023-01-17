@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // import from MUI
-import { Box, CssBaseline } from '@mui/material';
+import { Box, CssBaseline, Toolbar } from '@mui/material';
 
 // import custom components
 import Navigation from './components/Navigation';
