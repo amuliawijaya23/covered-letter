@@ -1,14 +1,22 @@
 import { useState } from 'react';
 
 // import from MUI
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Tooltip, MenuItem } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Tooltip, MenuItem, Button } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
+
+// state management
+import { useSelector } from 'react-redux';
 
 const settings = ['Projects', 'Logout'];
 
 const Navigation = () => {
+  // global state
+  const user = useSelector((state) => state.user.value);
+
+  // local state
   const [ menuAnchor, setMenuAnchor ] = useState(null);
 
+  // click handlers
   const handleOpenUserMenu = (event) => {
     setMenuAnchor(event.currentTarget);
   };
@@ -43,9 +51,9 @@ const Navigation = () => {
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="Open Menu">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt={!user ? 'User' : {}} src={!user ? '' : {}} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -64,11 +72,16 @@ const Navigation = () => {
               open={Boolean(menuAnchor)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {user && settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
+              {!user && (
+                <MenuItem>
+                  <Typography textAlign='center'>Login</Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
         </Toolbar>
