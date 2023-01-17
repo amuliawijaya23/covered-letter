@@ -7,6 +7,9 @@ import { Box, CssBaseline } from '@mui/material';
 // import custom components
 import Navigation from './components/Navigation';
 
+// import pages
+import Login from './pages/login';
+
 const App = () => {
   return (
     <Router>
@@ -14,7 +17,7 @@ const App = () => {
         <CssBaseline />
         <Navigation />
         <Routes>
-
+          <Route path='/login' element={<Login />} />
         </Routes>
       </Box>
     </Router>
