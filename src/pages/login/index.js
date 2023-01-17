@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Grid, Card, CardHeader, CardActions, CardContent, Button, TextField, Divider } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
@@ -7,9 +7,15 @@ import { useNavigate } from 'react-router-dom';
 const LOGIN = 'LOGIN';
 const REGISTER = 'REGISTER';
 
-const Login = ({ googleLogin }) => {
-
+const Login = ({ user, googleLogin }) => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [navigate, user]);
+
 
   const [ mode, setMode ] = useState(LOGIN);
 
