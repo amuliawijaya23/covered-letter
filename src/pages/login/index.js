@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { Box, Grid, Card, CardHeader, CardActions, CardContent, Button, TextField, Divider } from '@mui/material';
 
-// import custom hook
-import useUserData from '../../hooks/useUserData';
-
 // modes variables
 const LOGIN = 'LOGIN';
 const REGISTER = 'REGISTER';
 
-const Login = () => {
-  const { signInWithGoogle, signOutUser } = useUserData();
+const Login = ({ googleLogin }) => {
   const [ mode, setMode ] = useState(LOGIN);
 
   const modeHandler = () => {
@@ -63,7 +59,7 @@ const Login = () => {
         <CardContent>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Button variant='contained' fullWidth onClick={signInWithGoogle}>Sign in with Google</Button>
+              <Button variant='contained' fullWidth onClick={googleLogin}>Sign in with Google</Button>
             </Grid>
             <Grid item xs={12}>
               <Button variant='contained' fullWidth>Sign in with Microsoft</Button>

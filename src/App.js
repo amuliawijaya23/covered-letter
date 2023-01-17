@@ -10,14 +10,19 @@ import Navigation from './components/Navigation';
 // import pages
 import Login from './pages/login';
 
+// import custom hook
+import useUserData from './hooks/useUserData';
+
 const App = () => {
+  const { signInWithGoogle, signOutUser } = useUserData();
+
   return (
     <Router>
       <Box>
         <CssBaseline />
-        <Navigation />
+        <Navigation logout={signOutUser} />
         <Routes>
-          <Route path='/login' element={<Login />} />
+          <Route path='/login' element={<Login googleLogin={signInWithGoogle} />} />
         </Routes>
       </Box>
     </Router>

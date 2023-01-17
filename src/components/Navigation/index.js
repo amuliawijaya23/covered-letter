@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 const settings = ['Projects', 'Logout'];
 
-const Navigation = () => {
+const Navigation = ({ logout }) => {
   // global state
   const user = useSelector((state) => state.user.value);
 
@@ -23,6 +23,19 @@ const Navigation = () => {
 
   const handleCloseUserMenu = () => {
     setMenuAnchor(null);
+  };
+
+  const menuClickHandler = (option) => {
+    switch (option) {
+      case 'Logout':
+        logout();
+        setMenuAnchor(null);
+        break;
+
+      default:
+        setMenuAnchor(null);
+        break;
+    };
   };
 
   return (
@@ -51,9 +64,9 @@ const Navigation = () => {
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open Menu">
+            <Tooltip title={!user ? "Open Menu" : `Signed in as ${user?.displayName}`}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={!user ? 'User' : {}} src={!user ? '' : {}} />
+                <Avatar alt={!user ? 'User' : user?.displayName} src={!user ? '' : user?.photoURL} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -73,7 +86,7 @@ const Navigation = () => {
               onClose={handleCloseUserMenu}
             >
               {user && settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={() => menuClickHandler(setting)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
