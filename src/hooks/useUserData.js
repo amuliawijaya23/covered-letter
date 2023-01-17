@@ -3,10 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { auth, googleProvider } from '../firebase';
 import { signInWithPopup, signOut } from 'firebase/auth';
 
+// user reducer
 import { login, logout } from '../state/reducers/userReducer';
 
-
 const useUserData = () => {
+
   const dispatch = useDispatch();
 
   const signInWithGoogle = async () => {
@@ -14,6 +15,7 @@ const useUserData = () => {
       const { user } = await signInWithPopup(auth, googleProvider);
       dispatch(login({ ...user }));
       localStorage.setItem('user', JSON.stringify({ ...user }));
+      // navigate('/');
     } catch (error) {
       console.error(error.response ? error.response.body : error);
     };

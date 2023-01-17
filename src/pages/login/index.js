@@ -1,15 +1,25 @@
 import { useState } from 'react';
 import { Box, Grid, Card, CardHeader, CardActions, CardContent, Button, TextField, Divider } from '@mui/material';
 
+import { useNavigate } from 'react-router-dom';
+
 // modes variables
 const LOGIN = 'LOGIN';
 const REGISTER = 'REGISTER';
 
 const Login = ({ googleLogin }) => {
+
+  const navigate = useNavigate();
+
   const [ mode, setMode ] = useState(LOGIN);
 
   const modeHandler = () => {
     mode === LOGIN ? setMode(REGISTER) : setMode(LOGIN);
+  };
+
+  const signInWithGoogle = async() => {
+    await googleLogin();
+    navigate('/');
   };
 
   return (
@@ -59,7 +69,7 @@ const Login = ({ googleLogin }) => {
         <CardContent>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Button variant='contained' fullWidth onClick={googleLogin}>Sign in with Google</Button>
+              <Button variant='contained' fullWidth onClick={signInWithGoogle}>Sign in with Google</Button>
             </Grid>
             <Grid item xs={12}>
               <Button variant='contained' fullWidth>Sign in with Microsoft</Button>

@@ -4,12 +4,17 @@ import { useState } from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Tooltip, MenuItem, Button } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 
+import { useNavigate } from 'react-router-dom';
+
 // state management
 import { useSelector } from 'react-redux';
 
 const settings = ['Projects', 'Logout'];
 
 const Navigation = ({ logout }) => {
+
+  const navigate = useNavigate();
+
   // global state
   const user = useSelector((state) => state.user.value);
 
@@ -29,6 +34,11 @@ const Navigation = ({ logout }) => {
     switch (option) {
       case 'Logout':
         logout();
+        setMenuAnchor(null);
+        break;
+
+      case 'Login':
+        navigate('/login');
         setMenuAnchor(null);
         break;
 
@@ -92,7 +102,7 @@ const Navigation = ({ logout }) => {
               ))}
               {!user && (
                 <MenuItem>
-                  <Typography textAlign='center'>Login</Typography>
+                  <Typography textAlign='center' onClick={() => menuClickHandler('Login')}>Login</Typography>
                 </MenuItem>
               )}
             </Menu>

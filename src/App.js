@@ -22,6 +22,7 @@ const App = () => {
         <CssBaseline />
         <Navigation logout={signOutUser} />
         <Routes>
+          <Route path='/' element={<></>} />
           <Route path='/login' element={<Login googleLogin={signInWithGoogle} />} />
         </Routes>
       </Box>
