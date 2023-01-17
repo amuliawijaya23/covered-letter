@@ -70,7 +70,7 @@ const Login = () => {
           </Grid>
         </CardContent>
         <CardContent>
-          
+
         </CardContent>
       </Card>
     </Box>
