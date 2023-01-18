@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, Box, Card, CardMedia, IconButton } from '@mui/material';
+import { Grid, Box, Card, CardMedia } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 const boxStyle = {
