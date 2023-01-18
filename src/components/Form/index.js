@@ -1,4 +1,8 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useState, useEffect } from 'react';
+
+// import { Editor } from "react-draft-wysiwyg";
+// import { ContentState, convertToRaw } from 'draft-js';
+// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 import { 
   Grid,
@@ -21,6 +25,8 @@ import {
   CardContent
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
 import useOpenAI from '../../hooks/useOpenAI';
 
@@ -44,9 +50,17 @@ const steps = [
 ];
 
 const Form = ({ open, handleClose }) => {
-  const { form, letter, setJobTitle, setOrganizationName, setSlogan, generateIntroduction } = useOpenAI();
+  const { form, letter, setJobTitle, setOrganizationName, setSlogan, generateIntroduction, setOpening } = useOpenAI();
 
   const [step, setStep] = useState(0);
+
+  const handleNext = () => {
+    setStep((prev) => prev + 1);
+  };
+
+  const handleBack = () => {
+    setStep((prev) => prev - 1);
+  };
 
   return (
     <Dialog
@@ -67,7 +81,7 @@ const Form = ({ open, handleClose }) => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Box sx={{ width: '100%', p: 3 }}>
+      <Box sx={{ width: { xs: '100%', md: '100%' }, p: 3 }}>
         <Stepper activeStep={step} sx={{ mt: 3, mb: 5 }} orientation='vertical'>
           {steps.map((s) => (
             <Step key={s.label}>
@@ -78,49 +92,54 @@ const Form = ({ open, handleClose }) => {
                 </Typography>
                 {step === 0 && (
                   <>
-                    <Grid container spacing={1} sx={{ my: 2 }}>
-                      <Grid item xs={12}>
-                        <TextField 
+                    <Grid container spacing={2} padding={1} sx={{ my: 2 }}>
+                      <Grid item xs={12} md={4}>
+                        <TextField
                           fullWidth
                           variant='standard'
-                          label='Enter Job Title'
+                          label='Job Title'
                           value={form?.jobTitle}
                           onChange={(e) => setJobTitle(e.target.value)}
+                          sx={{ my: 0.5 }}
                         />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField 
+                        <TextField
                           fullWidth
                           variant='standard'
                           label='Enter organization name...'
                           value={form?.organizationName}
                           onChange={(e) => setOrganizationName(e.target.value)}
+                          sx={{ my: 0.5 }}
                         />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField 
+                        <TextField
                           fullWidth
-                          variant='standard'
+                          sx={{ my: 2 }}
                           label='Enter organization vision or slogan...'
                           value={form?.slogan}
                           onChange={(e) => setSlogan(e.target.value)}
+                          multiline
+                          rows={4}
                         />
+                        <Button 
+                          fullWidth
+                          variant='contained'
+                          onClick={generateIntroduction}
+                        >
+                          Generate
+                        </Button>
+                      </Grid>
+                      <Grid item xs={12} md={8} padding={2}>
+                        {letter?.opening && (
+                          <Card sx={{ my: 2, p: 5, border: 'solid', height: '100%' }}>
+                            <Typography component='span' variant='body2' >
+                              {letter?.opening}
+                            </Typography>
+                          </Card>
+                        )}
+                      </Grid>
+                      <Grid item xs={12}>
+                        
                       </Grid>
                     </Grid>
-                    <Button 
-                      fullWidth 
-                      variant='contained'
-                      onClick={generateIntroduction}
-                    >
-                      Generate
-                    </Button>
-                    <Card sx={{ p: 1, mt: 2 }}>
-                      <CardContent>
-                        <Typography component='span' variant='body1'>
-                          {letter?.opening}
-                        </Typography>
-                      </CardContent>
-                    </Card>
                   </>
                 )}
                 {step === 1 && (
@@ -129,6 +148,27 @@ const Form = ({ open, handleClose }) => {
                 {step === 2 && (
                   <></>
                 )}
+                <Box sx={{ display: 'flex', justifyContent: 'end', px: 2 }}>
+                  {step > 0 && (
+                    <Button
+                      variant='contained'
+                      startIcon={<NavigateBeforeIcon />}
+                      onClick={handleBack}
+                      sx={{ mr: 1}}
+                    >
+                      Back
+                    </Button>
+                  )}
+                  {step < 2 && (
+                    <Button 
+                      variant='contained' 
+                      endIcon={<NavigateNextIcon />}
+                      onClick={handleNext}
+                    >
+                      Next
+                    </Button>
+                  )}
+                </Box>
               </StepContent>
             </Step>
           ))}

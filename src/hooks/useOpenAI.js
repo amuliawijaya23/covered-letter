@@ -32,14 +32,18 @@ const useOpenAI = () => {
     setForm((prev) => ({ ...prev, slogan: input }));
   };
 
+  const setOpening = (input) => {
+    setLetter((prev) => ({ ...prev, opening: input }));
+  };
+
   const generateIntroduction = async () => {
     try {
       if (form?.jobTitle && form?.organizationName && form?.slogan) {
         const response = await openAI.createCompletion({
           model: "text-davinci-003",
-          prompt: `write a cover letter opening for an ${form?.jobTitle} position at ${form?.organizationName}. The company's vision is "${form?.slogan}".`,
-          temperature: 0.85,
-          max_tokens: 400,
+          prompt: `Write a cover letter opening for ${form?.jobTitle} position at ${form?.organizationName}. The company's vision is "${form?.slogan}".`,
+          temperature: 0.80,
+          max_tokens: 500,
           top_p: 1,
           frequency_penalty: 0,
           presence_penalty: 0,
@@ -59,6 +63,7 @@ const useOpenAI = () => {
     setJobTitle,
     setOrganizationName,
     setSlogan,
+    setOpening,
     error,
     form,
     letter
