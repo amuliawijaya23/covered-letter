@@ -2,15 +2,16 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // import from MUI
-import { Box, CssBaseline, Toolbar } from '@mui/material';
+import { Box, CssBaseline } from '@mui/material';
 
-// import custom components
-import Navigation from './components/Navigation';
+import { useSelector } from 'react-redux';
 
 // import pages
 import Login from './pages/login';
+import Dashboard from './pages/dashboard';
 
-import { useSelector } from 'react-redux';
+// import custom components
+import Navigation from './components/Navigation';
 
 // import custom hook
 import useUserData from './hooks/useUserData';
@@ -29,6 +30,8 @@ const App = () => {
         <Routes>
           <Route path='/' element={<></>} />
           <Route path='/login' element={<Login user={user} googleLogin={signInWithGoogle} />} />
+          <Route path='/dashboard/:id' element={<Dashboard />} />
+          <Route path='*' element={<></>} />
         </Routes>
       </Box>
     </Router>
