@@ -25,7 +25,7 @@ const Login = ({ user, googleLogin }) => {
 
   const signInWithGoogle = async() => {
     await googleLogin();
-    navigate('/');
+    navigate(`/dashboard/${user?.uid}`);
   };
 
   return (

@@ -9,12 +9,13 @@ const useOpenAI = () => {
   const [ form, setForm ] = useState({
     jobTitle: '',
     organizationName: '',
-    slogan: ''
+    culture: '',
+    values: []
   });
 
   const [ letter, setLetter ] = useState({
     opening: '',
-    strengths: [],
+    values: [],
     closing: ''
   });
 
@@ -28,12 +29,24 @@ const useOpenAI = () => {
     setForm((prev) => ({ ...prev, organizationName: input }));
   };
   
-  const setSlogan = (input) => {
-    setForm((prev) => ({ ...prev, slogan: input }));
+  const setCulture = (input) => {
+    setForm((prev) => ({ ...prev, culture: input }));
   };
 
   const setOpening = (input) => {
     setLetter((prev) => ({ ...prev, opening: input }));
+  };
+
+  const setValues = (input, index) => {
+    const newValues = [ ...form?.values ];
+    newValues[index] = { ...newValues[index], value: input };
+    setForm((prev) => ({ ...prev, values: newValues }));
+  };
+
+  const setExperience = (input, index) => {
+    const newValues = [ ...form?.values ];
+    newValues[index] = { ...newValues[index], experience: input };
+    setForm((prev) => ({ ...prev, values: newValues }));
   };
 
   const generateIntroduction = async () => {
@@ -41,9 +54,9 @@ const useOpenAI = () => {
       if (form?.jobTitle && form?.organizationName && form?.slogan) {
         const response = await openAI.createCompletion({
           model: "text-davinci-003",
-          prompt: `Write a cover letter opening for ${form?.jobTitle} position at ${form?.organizationName}. The company's vision is "${form?.slogan}".`,
+          prompt: `Write a cover letter opening for ${form?.jobTitle} position at a company called ${form?.organizationName}. The company's culture is "${form?.slogan}".`,
           temperature: 0.80,
-          max_tokens: 500,
+          max_tokens: 400,
           top_p: 1,
           frequency_penalty: 0,
           presence_penalty: 0,
@@ -57,13 +70,37 @@ const useOpenAI = () => {
     };
   };
 
+  const generateValueHighlight = async (index) => {
+    try {
+      if (form?.values[index]) {
+        const response = await openAI.createCompletion({
+          model: "text-davinci-003",
+          prompt: `write a cover letter paragraph highlighting my ${form?.values[index]?.value} ability through the following experiences: ${form?.values[index]?.experience}.`,
+          temperature: 0.85,
+          max_tokens: 400,
+          top_p: 1,
+          frequency_penalty: 0,
+          presence_penalty: 0,
+        });
+        const newValues = [ ...letter?.values ];
+        newValues[index] = response.data.choices[0].text.trim();
+        setLetter((prev) => ({ ...prev, values: newValues }));
+      };
+    } catch (error) {
+      console.error(error.response ? error.response.body : error);
+    }
+  }
+
 
   return {
     generateIntroduction,
     setJobTitle,
     setOrganizationName,
-    setSlogan,
+    setCulture,
+    setValues,
+    setExperience,
     setOpening,
+    generateValueHighlight,
     error,
     form,
     letter

@@ -34,11 +34,17 @@ const Navigation = ({ logout }) => {
     switch (option) {
       case 'Logout':
         logout();
+        navigate('/');
         setMenuAnchor(null);
         break;
 
       case 'Login':
         navigate('/login');
+        setMenuAnchor(null);
+        break;
+      
+      case 'Projects':
+        navigate(`/dashboard/${user?.uid}`);
         setMenuAnchor(null);
         break;
 

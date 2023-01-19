@@ -53,7 +53,7 @@ const steps = [
 ];
 
 const Form = ({ open, handleClose }) => {
-  const { form, letter, setJobTitle, setOrganizationName, setSlogan, generateIntroduction, setOpening } = useOpenAI();
+  const { form, letter, setJobTitle, setOrganizationName, setCulture, setValues, setExperience, generateIntroduction, generateValueHighlight } = useOpenAI();
 
   const [step, setStep] = useState(0);
 
@@ -73,7 +73,11 @@ const Form = ({ open, handleClose }) => {
       TransitionComponent={Transition}
     >
       <AppBar sx={{ position: 'relative' }}>
-        <Toolbar>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <TextField 
+            sx={{ width: 300 }}
+            variant='standard'
+          />
           <IconButton
             edge='start'
             color='inheirt'
@@ -82,10 +86,6 @@ const Form = ({ open, handleClose }) => {
           >
             <CloseIcon />
           </IconButton>
-          <TextField 
-            sx={{ width: 300 }}
-            variant='standard'
-          />
         </Toolbar>
       </AppBar>
       <Box sx={{ width: { xs: '100%', md: '100%' }, p: 3 }}>
@@ -122,7 +122,7 @@ const Form = ({ open, handleClose }) => {
                           sx={{ my: 2 }}
                           label='Enter organization vision or slogan...'
                           value={form?.slogan}
-                          onChange={(e) => setSlogan(e.target.value)}
+                          onChange={(e) => setCulture(e.target.value)}
                           multiline
                           rows={4}
                         />
@@ -173,25 +173,31 @@ const Form = ({ open, handleClose }) => {
                             fullWidth
                             variant='standard'
                             label='First Strength'
-                            value={''}
-                            // onChange={(e) => setJobTitle(e.target.value)}
+                            value={letter?.values[0]?.value}
+                            onChange={(e) => setValues(e.target.value, 0)}
                             sx={{ my: 0.5 }}
                           />
                           <TextField
                             fullWidth
                             sx={{ my: 2 }}
                             label='Provide a scenario where you demonstrate this strength...'
-                            value={''}
-                            // onChange={(e) => setSlogan(e.target.value)}
+                            value={letter?.values[0]?.experience}
+                            onChange={(e) => setExperience(e.target.value, 0)}
                             multiline
                             rows={4}
                           />
+                          <Button 
+                            variant='contained'
+                            onClick={() => generateValueHighlight(0)}
+                          >
+                            Generate
+                          </Button>
                         </Grid>
-                        <Grid item xs={12} lg={8}>
-                          {letter?.strengths[0] && (
+                        <Grid item xs={12} lg={8} padding={2}>
+                          {letter?.values[0] && (
                             <Card sx={{ my: 2, p: 5, border: 'solid', height: '100%' }}>
                               <Typography component='span' variant='body2' >
-                                {letter?.strengths[0]}
+                                {letter?.values[0]}
                               </Typography>
                             </Card>
                           )}
@@ -203,25 +209,31 @@ const Form = ({ open, handleClose }) => {
                             fullWidth
                             variant='standard'
                             label='Second Strength'
-                            value={''}
-                            // onChange={(e) => setJobTitle(e.target.value)}
+                            value={letter?.values[1]?.value}
+                            onChange={(e) => setValues(e.target.value, 1)}
                             sx={{ my: 0.5 }}
                           />
                           <TextField
                             fullWidth
                             sx={{ my: 2 }}
                             label='Provide a scenario where you demonstrate this strength...'
-                            value={''}
-                            // onChange={(e) => setSlogan(e.target.value)}
+                            value={letter?.values[1]?.experience}
+                            onChange={(e) => setExperience(e.target.value, 1)}
                             multiline
                             rows={4}
                           />
+                          <Button 
+                            variant='contained'
+                            onClick={() => generateValueHighlight(1)}
+                          >
+                            Generate
+                          </Button>
                         </Grid>
-                        <Grid item xs={12} lg={8}>
-                          {letter?.strengths[1] && (
+                        <Grid item xs={12} lg={8} padding={2}>
+                          {letter?.values[1] && (
                             <Card sx={{ my: 2, p: 5, border: 'solid', height: '100%' }}>
                               <Typography component='span' variant='body2' >
-                                {letter?.strengths[1]}
+                                {letter?.values[1]}
                               </Typography>
                             </Card>
                           )}
@@ -233,25 +245,31 @@ const Form = ({ open, handleClose }) => {
                             fullWidth
                             variant='standard'
                             label='Third Strength'
-                            value={''}
-                            // onChange={(e) => setJobTitle(e.target.value)}
+                            value={letter?.values[2]?.value}
+                            onChange={(e) => setValues(e.target.value, 2)}
                             sx={{ my: 0.5 }}
                           />
                           <TextField
                             fullWidth
                             sx={{ my: 2 }}
                             label='Provide a scenario where you demonstrate this strength...'
-                            value={''}
-                            // onChange={(e) => setSlogan(e.target.value)}
+                            value={letter?.values[2]?.experience}
+                            onChange={(e) => setExperience(e.target.value, 2)}
                             multiline
                             rows={4}
                           />
+                          <Button 
+                            variant='contained'
+                            onClick={() => generateValueHighlight(2)}
+                          >
+                            Generate
+                          </Button>
                         </Grid>
-                        <Grid item xs={12} lg={8}>
-                          {letter?.strengths[2] && (
+                        <Grid item xs={12} lg={8} padding={2}>
+                          {letter?.values[2] && (
                             <Card sx={{ my: 2, p: 5, border: 'solid', height: '100%' }}>
                               <Typography component='span' variant='body2' >
-                                {letter?.strengths[2]}
+                                {letter?.values[2]}
                               </Typography>
                             </Card>
                           )}
