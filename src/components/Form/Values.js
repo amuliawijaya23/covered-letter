@@ -36,7 +36,7 @@ const Values = ({ values, setValues, setExperience, addValue, removeValue, gener
                 fullWidth
                 sx={{ my: 2 }}
                 placeholder='Provide your experience with this core value...'
-                value={values[0]?.experience}
+                value={values[index]?.experience}
                 onChange={(e) => setExperience(e.target.value, index)}
                 multiline
                 rows={4}

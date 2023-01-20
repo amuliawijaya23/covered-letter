@@ -1,8 +1,8 @@
-import { forwardRef, useState, useEffect } from 'react';
+import { forwardRef, useState, useEffect, useMemo } from 'react';
 
-// import { Editor } from "react-draft-wysiwyg";
-// import { ContentState, convertToRaw } from 'draft-js';
-// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState, ContentState, convertToRaw, convertFromHTML } from 'draft-js';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 import { 
   Box,
@@ -22,7 +22,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import DoneIcon from '@mui/icons-material/Done';
+import SaveIcon from '@mui/icons-material/Save';
 
 import Opening from './Opening';
 import Values from './Values';
@@ -48,6 +48,10 @@ const steps = [
   {
     label: 'Closing',
     description: 'Create closing statement for your cover letter.'
+  },
+  {
+    label: 'Edit and Finalize',
+    description: 'Edit and finalize your letter before saving.'
   }
 ];
 
@@ -80,6 +84,26 @@ const Form = ({ open, handleClose }) => {
   const handleBack = () => {
     setStep((prev) => prev - 1);
   };
+  
+  
+  const letterContent = useMemo(() => {
+    let content = `<p>${letter?.opening}</p><br>`;
+
+    if (letter?.values.length > 0) {
+      for (let i = 0; i < letter.values.length; i++) {
+        content = `${content} <p>${letter.values[i]}</p><br>`;
+      }
+    };
+
+    if (letter?.closing) {
+      content = `${content} <p>${letter.closing}</p>`;
+    };
+    return content;
+  }, [letter?.opening, letter?.values, letter?.closing])
+
+  const contentBlocks = convertFromHTML(letterContent);
+  const contentState = new ContentState.createFromBlockArray(contentBlocks);
+  const editorContent = new EditorState.createWithContent(contentState);
 
   return (
     <Dialog
@@ -140,6 +164,15 @@ const Form = ({ open, handleClose }) => {
                     generateClosing={generateClosing}
                   />
                 )}
+                {step === 3 && ( 
+                  <Box sx={{ my: 2 }}>
+                    <Editor 
+                      toolbarClassName='toolbar-classname'
+                      defaultEditorState={editorContent}
+                      toolbar
+                    />
+                  </Box>       
+                )}
                 <Box sx={{ display: 'flex', justifyContent: 'end', px: 2 }}>
                   {step > 0 && (
                     <Button
@@ -151,7 +184,7 @@ const Form = ({ open, handleClose }) => {
                       Back
                     </Button>
                   )}
-                  {step < 2 && (
+                  {step < 3 && (
                     <Button 
                       variant='contained' 
                       endIcon={<NavigateNextIcon />}
@@ -160,12 +193,12 @@ const Form = ({ open, handleClose }) => {
                       Next
                     </Button>
                   )}
-                  {step === 2 && (
+                  {step === 3 && (
                     <Button 
                       variant='contained' 
-                      endIcon={<DoneIcon />}
+                      endIcon={<SaveIcon />}
                     >
-                      Done
+                      Save
                     </Button>
                   )}
                 </Box>
