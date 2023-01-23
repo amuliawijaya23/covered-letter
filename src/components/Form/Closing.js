@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Grid, IconButton, Card, Typography } from '@mui/material';
+import { Grid, IconButton, Card, Typography, TextField } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
@@ -12,6 +12,11 @@ const Closing = ({ generateClosing }) => {
   return (
     <Grid container spacing={2} padding={1} sx={{ my: 2 }}>
       <Grid item xs={12} lg={4}>
+        <TextField 
+          fullWidth
+          multiline
+          rows={4}
+        />
         <IconButton
           edge='end'
           color='inherit'

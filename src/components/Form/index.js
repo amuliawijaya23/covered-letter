@@ -1,7 +1,7 @@
 import { forwardRef, useState, useEffect, useMemo } from 'react';
 
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState, ContentState, convertToRaw, convertFromHTML } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 import { 
@@ -58,6 +58,7 @@ const steps = [
 const Form = ({ open, handleClose }) => {
   const { 
     form,
+    setRecipient,
     setJobTitle, 
     setOrganizationName, 
     setCulture, 
@@ -72,7 +73,28 @@ const Form = ({ open, handleClose }) => {
 
   const letter = useSelector((state) => state.letter.value);
 
+  const letterHTML = useMemo(() => {
+    let content = '';
+
+    if (letter?.opening && letter?.values.length > 0 && letter?.closing) {
+      content = '<p>To [Insert],</p><br>';
+      content = `${content} <p>${letter?.opening}</p><br>`;
+      for (let i = 0; i < letter.values.length; i++) {
+        content = `${content} <p>${letter.values[i]}</p><br>`;
+      };
+      content = `${content} <p>${letter.closing}</p><br>`;
+      content = `${content} <p>Sincerely</p><br> <p>[Your Name]</p>`;
+    };
+    return content;
+  }, [letter?.opening, letter?.values, letter?.closing]);
+
+  const contentBlocks = convertFromHTML(letterHTML);
+  const contentState = new ContentState.createFromBlockArray(contentBlocks);
+
   const [step, setStep] = useState(0);
+  const [editorState, setEditorState] = useState(() => 
+    EditorState.createWithContent(contentState)
+  );
 
   const handleNext = () => {
     if (step === 1 && !letter.closing) {
@@ -84,26 +106,6 @@ const Form = ({ open, handleClose }) => {
   const handleBack = () => {
     setStep((prev) => prev - 1);
   };
-  
-  
-  const letterContent = useMemo(() => {
-    let content = `<p>${letter?.opening}</p><br>`;
-
-    if (letter?.values.length > 0) {
-      for (let i = 0; i < letter.values.length; i++) {
-        content = `${content} <p>${letter.values[i]}</p><br>`;
-      }
-    };
-
-    if (letter?.closing) {
-      content = `${content} <p>${letter.closing}</p>`;
-    };
-    return content;
-  }, [letter?.opening, letter?.values, letter?.closing])
-
-  const contentBlocks = convertFromHTML(letterContent);
-  const contentState = new ContentState.createFromBlockArray(contentBlocks);
-  const editorContent = new EditorState.createWithContent(contentState);
 
   return (
     <Dialog
@@ -139,9 +141,11 @@ const Form = ({ open, handleClose }) => {
                 </Typography>
                 {step === 0 && (
                   <Opening
+                    recipient={form.recipient}
                     jobTitle={form.jobTitle}
                     organizationName={form.organizationName}
                     culture={form.culture}
+                    setRecipient={setRecipient}
                     setJobTitle={setJobTitle}
                     setOrganizationName={setOrganizationName}
                     setCulture={setCulture}
@@ -168,7 +172,11 @@ const Form = ({ open, handleClose }) => {
                   <Box sx={{ my: 2 }}>
                     <Editor 
                       toolbarClassName='toolbar-classname'
-                      defaultEditorState={editorContent}
+                      wrapperClassName="wrapper-class"
+                      editorClassName="editor-class"
+                      defaultEditorState={editorState}
+                      editorState={editorState}
+                      onEditorStateChange={setEditorState}
                       toolbar
                     />
                   </Box>       

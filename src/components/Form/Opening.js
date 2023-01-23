@@ -12,7 +12,7 @@ import {
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const Opening = ({ jobTitle, organizationName, culture, setJobTitle, setOrganizationName, setCulture, generateIntroduction, opening }) => {
+const Opening = ({ recipient, jobTitle, organizationName, culture, setRecipient, setJobTitle, setOrganizationName, setCulture, generateIntroduction, opening }) => {
   return (
     <Grid container spacing={2} padding={1} sx={{ my: 2 }}>
       <Grid item xs={12} lg={4}>

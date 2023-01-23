@@ -16,6 +16,7 @@ const useOpenAI = () => {
   const letter = useSelector((state) => state.letter.value);
 
   const [ form, setForm ] = useState({
+    recipient: '',
     jobTitle: '',
     organizationName: '',
     culture: '',
@@ -26,6 +27,10 @@ const useOpenAI = () => {
   });
 
   const [ error, setError ] = useState('');
+
+  const setRecipient = (input) => {
+    setForm((prev) => ({ ...prev, recipient: input }));
+  };
 
   const setJobTitle = (input) => {
     setForm((prev) => ({ ...prev, jobTitle: input }));
@@ -119,14 +124,14 @@ const useOpenAI = () => {
       if (form.jobTitle && form.organizationName) {
         const response = await openAI.createCompletion({
           model: "text-davinci-003",
-          prompt: `write a cover letter closing paragraph for ${form.jobTitle} position at a company called ${form.organizationName}.`,
+          prompt: `write a cover letter enclosure paragraph for ${form.jobTitle} position at a company called ${form.organizationName}. Signature line not required.`,
           temperature: 0.85,
           max_tokens: 400,
           top_p: 1,
           frequency_penalty: 0,
           presence_penalty: 0,
         });
-        dispatch(updateClosing(response.data.choices[0].text.trim()));
+        dispatch(updateClosing(response.data.choices[0].text.split('Sincerely,\n[Your Name]')[0].trim()));
       }
     } catch (error) {
       console.error(error.response ? error.response.body : error);
@@ -136,6 +141,7 @@ const useOpenAI = () => {
 
   return {
     generateIntroduction,
+    setRecipient,
     setJobTitle,
     setOrganizationName,
     setCulture,
