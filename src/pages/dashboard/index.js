@@ -12,6 +12,14 @@ const boxStyle = {
   cursor: 'pointer'
 };
 
+const mediaStyle = {
+  display: 'flex', 
+  width: '100%', 
+  height: '100%', 
+  justifyContent: 'center', 
+  alignItems: 'center' 
+};
+
 const Dashboard = () => {
 
   const [ open, setOpen ] = useState(false);
@@ -24,14 +32,15 @@ const Dashboard = () => {
     setOpen(false);
   };
 
+
   return (
     <Box sx={{ p: 2 }}>
       <Form open={open} handleClose={handleFormClose} />
       <Grid container spacing={1}>
-        <Grid item xs={3}>
+        <Grid item xs={4} m={3} l={2}>
           <Card sx={boxStyle} onClick={handleFormOpen}>
-            <CardMedia sx={{ display: 'flex', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-              <AddIcon sx={{ fontSize: {xs: '2rem', md: '4rem'} }} />
+            <CardMedia sx={mediaStyle}>
+              <AddIcon sx={{fontSize: { xs: '2rem', md: '4rem' }}}/>
             </CardMedia>
           </Card>
         </Grid>
