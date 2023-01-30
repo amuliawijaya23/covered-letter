@@ -1,43 +1,95 @@
-import React from 'react'
+import { useSelector } from 'react-redux';
 
 import { 
   Grid,
   Box,
   IconButton,
   Typography,
+  FormControl,
   TextField,
+  InputLabel,
+  Select,
+  MenuItem,
   Button,
   Card,
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const Opening = ({ recipient, jobTitle, organizationName, culture, setRecipient, setJobTitle, setOrganizationName, setCulture, generateIntroduction, opening }) => {
+const Opening = ({ 
+  job,
+  organization,
+  culture,
+  experience,
+  reason,
+  updateJob,
+  updateOrganization,
+  updateCulture,
+  updateExperience,
+  updateReason,
+  generateIntroduction,
+}) => {
+  const opening = useSelector((state) => state.letter.value.opening);
+
+  let experienceOptions = [];
+
+  for (let i = 0; i <= 20; i++) {
+    experienceOptions.push(i);
+  };
+
   return (
-    <Grid container spacing={2} padding={1} sx={{ my: 2 }}>
+    <Grid container spacing={2} padding={1}>
       <Grid item xs={12} lg={4}>
         <TextField
           fullWidth
-          variant='standard'
+          sx={{ my: 0.5 }}
+          variant='outlined'
           label='Job Title'
-          value={jobTitle}
-          onChange={(e) => setJobTitle(e.target.value)}
-          sx={{ my: 0.5 }}
+          value={job}
+          onChange={(e) => updateJob(e.target.value)}
         />
         <TextField
           fullWidth
-          variant='standard'
+          sx={{ my: 0.5 }}
+          variant='outlined'
           label='Organization Name'
-          value={organizationName}
-          onChange={(e) => setOrganizationName(e.target.value)}
+          value={organization}
+          onChange={(e) => updateOrganization(e.target.value)}
+        />
+        <FormControl
+          fullWidth
           sx={{ my: 0.5 }}
+        >
+          <InputLabel id='select-experience-label'>Experience</InputLabel>
+          <Select
+            labelId='select-experience-label'
+            id='select-experience'
+            value={experience}
+            label='Experience'
+            onChange={(e) => updateExperience(e.target.value)}
+          >
+            {experienceOptions.map((year) => (
+              year === 1 || year === 0 ? <MenuItem value={`${year} Year`}>{year} Year</MenuItem> : <MenuItem value={`${year} Years`}>{year} Years</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <TextField
+          fullWidth
+          sx={{ my: 0.5 }}
+          label={`Explain the organization's culture`}
+          value={culture}
+          helperText={`Optional`}
+          onChange={(e) => updateCulture(e.target.value)}
+          multiline
+          rows={4}
         />
         <TextField
           fullWidth
-          sx={{ my: 2 }}
-          label='Culture'
-          value={culture}
-          onChange={(e) => setCulture(e.target.value)}
+          sx={{ my: 0.5 }}
+          label={`Explain why you want to work with this organization`}
+          value={reason}
+          helperText='Optional'
+          onChange={(e) => updateReason(e.target.value)}
           multiline
           rows={4}
         />

@@ -8,7 +8,7 @@ import Form from '../../components/Form';
 
 const boxStyle = {
   width: '100%',
-  height: { xs: 100, md: 200 },
+  height: { xs: 200, md: 250, lg: 250 },
   cursor: 'pointer'
 };
 
@@ -37,7 +37,7 @@ const Dashboard = () => {
     <Box sx={{ p: 2 }}>
       <Form open={open} handleClose={handleFormClose} />
       <Grid container spacing={1}>
-        <Grid item xs={4} m={3} l={2}>
+        <Grid item xs={4} m={3} lg={2} xl={2}>
           <Card sx={boxStyle} onClick={handleFormOpen}>
             <CardMedia sx={mediaStyle}>
               <AddIcon sx={{fontSize: { xs: '2rem', md: '4rem' }}}/>

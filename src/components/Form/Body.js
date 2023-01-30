@@ -14,7 +14,14 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { useSelector } from 'react-redux';
 
-const Values = ({ values, setValues, setExperience, addValue, removeValue, generateValueHighlight }) => {
+const Body = ({ 
+  values,
+  updateValue,
+  updateFeat,
+  addValue,
+  removeValue,
+  generateValueHighlight
+}) => {
 
   const letter = useSelector((state) => state.letter.value);
 
@@ -29,15 +36,15 @@ const Values = ({ values, setValues, setExperience, addValue, removeValue, gener
                 variant='standard'
                 label='Core Value'
                 value={values[index]?.value}
-                onChange={(e) => setValues(e.target.value, index)}
+                onChange={(e) => updateValue(e.target.value, index)}
                 sx={{ my: 0.5 }}
               />
               <TextField
                 fullWidth
                 sx={{ my: 2 }}
                 placeholder='Provide your experience with this core value...'
-                value={values[index]?.experience}
-                onChange={(e) => setExperience(e.target.value, index)}
+                value={values[index]?.feat}
+                onChange={(e) => updateFeat(e.target.value, index)}
                 multiline
                 rows={4}
               />
@@ -61,10 +68,10 @@ const Values = ({ values, setValues, setExperience, addValue, removeValue, gener
               </Box>
             </Grid>
             <Grid item xs={12} lg={8} padding={2}>
-              {letter.values[index] && (
+              {letter.body[index] && (
                 <Card sx={{ my: 2, p: 5, border: 'solid', height: '100%' }}>
                   <Typography component='span' variant='body2' >
-                    {letter.values[index]}
+                    {letter.body[index]}
                   </Typography>
                 </Card>
               )}
@@ -86,4 +93,4 @@ const Values = ({ values, setValues, setExperience, addValue, removeValue, gener
   )
 }
 
-export default Values
+export default Body;

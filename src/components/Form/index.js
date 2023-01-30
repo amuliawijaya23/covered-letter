@@ -1,5 +1,7 @@
 import { forwardRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
+// import from MUI
 import { 
   Box,
   Dialog,
@@ -20,14 +22,14 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import SaveIcon from '@mui/icons-material/Save';
 
+// import custom components
 import Opening from './Opening';
-import Values from './Values';
+import Body from './Body';
 import Closing from './Closing';
 import Edit from './Edit';
 
-import useOpenAI from '../../hooks/useOpenAI';
-
-import { useSelector } from 'react-redux';
+// import custom hook
+import useFormData from '../../hooks/useFormData';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -39,7 +41,7 @@ const steps = [
     description: 'Create an opening introduction for your cover letter.'
   },
   {
-    label: 'Values',
+    label: 'Body',
     description: `Show how you fit in with the company's core values.`
   },
   {
@@ -54,19 +56,28 @@ const steps = [
 
 const Form = ({ open, handleClose }) => {
   const { 
-    form,
-    setRecipient,
-    setJobTitle, 
-    setOrganizationName, 
-    setCulture, 
-    setValues, 
-    setExperience,
+    updateTitle,
+    updateJob,
+    updateOrganization,
+    updateCulture,
+    updateExperience,
+    updateReason,
+    updateValue,
+    updateFeat,
     addValue,
     removeValue,
-    generateIntroduction, 
+    generateIntroduction,
     generateValueHighlight,
-    generateClosing
-  } = useOpenAI();
+    generateClosing,
+    title,
+    job,
+    organization,
+    culture,
+    experience,
+    reason,
+    values,
+    error,
+  } = useFormData();
 
   const letter = useSelector((state) => state.letter.value);
 
@@ -81,7 +92,7 @@ const Form = ({ open, handleClose }) => {
         break;
 
       case 1:
-        if (letter.values.length > 0) {
+        if (letter.body.length > 0) {
           if (!letter.closing) {
             generateClosing();
           };
@@ -113,7 +124,10 @@ const Form = ({ open, handleClose }) => {
     >
       <AppBar sx={{ position: 'relative' }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <TextField 
+          <TextField
+            onChange={(e) => updateTitle(e.target.value)}
+            value={title}
+            label='Title'
             sx={{ width: 300 }}
             variant='standard'
           />
@@ -138,23 +152,24 @@ const Form = ({ open, handleClose }) => {
                 </Typography>
                 {step === 0 && (
                   <Opening
-                    recipient={form.recipient}
-                    jobTitle={form.jobTitle}
-                    organizationName={form.organizationName}
-                    culture={form.culture}
-                    setRecipient={setRecipient}
-                    setJobTitle={setJobTitle}
-                    setOrganizationName={setOrganizationName}
-                    setCulture={setCulture}
+                    job={job}
+                    organization={organization}
+                    culture={culture}
+                    experience={experience}
+                    reason={reason}
+                    updateJob={updateJob}
+                    updateOrganization={updateOrganization}
+                    updateCulture={updateCulture}
+                    updateExperience={updateExperience}
+                    updateReason={updateReason}
                     generateIntroduction={generateIntroduction}
-                    opening={letter.opening}
                   />
                 )}
                 {step === 1 && (
-                  <Values 
-                    values={form.values}
-                    setValues={setValues}
-                    setExperience={setExperience}
+                  <Body 
+                    values={values}
+                    updateValue={updateValue}
+                    updateFeat={updateFeat}
                     generateValueHighlight={generateValueHighlight}
                     addValue={addValue}
                     removeValue={removeValue}

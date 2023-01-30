@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   opening: '',
-  values: [],
+  body: [],
   closing: ''
 };
 
@@ -15,8 +15,8 @@ export const letterSlice =  createSlice({
     updateOpening: (state, action) => {
       state.value.opening = action.payload;
     },
-    updateValues: (state, action) => {
-      state.value.values = action.payload;
+    updateBody: (state, action) => {
+      state.value.body = action.payload;
     },
     updateClosing: (state, action) => {
       state.value.closing = action.payload;
@@ -24,6 +24,6 @@ export const letterSlice =  createSlice({
   },
 });
 
-export const { updateOpening, updateValues, updateClosing } = letterSlice.actions;
+export const { updateOpening, updateBody, updateClosing } = letterSlice.actions;
 
 export default letterSlice.reducer;
