@@ -1,8 +1,4 @@
-import { forwardRef, useState, useEffect, useMemo } from 'react';
-
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState, ContentState, convertFromHTML } from 'draft-js';
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { forwardRef, useState } from 'react';
 
 import { 
   Box,
@@ -27,6 +23,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import Opening from './Opening';
 import Values from './Values';
 import Closing from './Closing';
+import Edit from './Edit';
 
 import useOpenAI from '../../hooks/useOpenAI';
 
@@ -73,34 +70,34 @@ const Form = ({ open, handleClose }) => {
 
   const letter = useSelector((state) => state.letter.value);
 
-  const letterHTML = useMemo(() => {
-    let content = '';
-
-    if (letter?.opening && letter?.values.length > 0 && letter?.closing) {
-      content = '<p>To [Insert],</p><br>';
-      content = `${content} <p>${letter?.opening}</p><br>`;
-      for (let i = 0; i < letter.values.length; i++) {
-        content = `${content} <p>${letter.values[i]}</p><br>`;
-      };
-      content = `${content} <p>${letter.closing}</p><br>`;
-      content = `${content} <p>Sincerely</p><br> <p>[Your Name]</p>`;
-    };
-    return content;
-  }, [letter?.opening, letter?.values, letter?.closing]);
-
-  const contentBlocks = convertFromHTML(letterHTML);
-  const contentState = new ContentState.createFromBlockArray(contentBlocks);
-
   const [step, setStep] = useState(0);
-  const [editorState, setEditorState] = useState(() => 
-    EditorState.createWithContent(contentState)
-  );
 
   const handleNext = () => {
-    if (step === 1 && !letter.closing) {
-      generateClosing();
+    switch (step) {
+      case 0:
+        if (letter.opening) {
+          setStep((prev) => prev + 1);
+        };
+        break;
+
+      case 1:
+        if (letter.values.length > 0) {
+          if (!letter.closing) {
+            generateClosing();
+          };
+          setStep((prev) => prev + 1);
+        };
+        break;
+
+      case 2:
+        if (letter.closing) {
+          setStep((prev) => prev + 1);
+        };
+        break;
+
+      default:
+        break;
     }
-    setStep((prev) => prev + 1);
   };
 
   const handleBack = () => {
@@ -169,17 +166,7 @@ const Form = ({ open, handleClose }) => {
                   />
                 )}
                 {step === 3 && ( 
-                  <Box sx={{ my: 2 }}>
-                    <Editor 
-                      toolbarClassName='toolbar-classname'
-                      wrapperClassName="wrapper-class"
-                      editorClassName="editor-class"
-                      defaultEditorState={editorState}
-                      editorState={editorState}
-                      onEditorStateChange={setEditorState}
-                      toolbar
-                    />
-                  </Box>       
+                  <Edit />    
                 )}
                 <Box sx={{ display: 'flex', justifyContent: 'end', px: 2 }}>
                   {step > 0 && (
