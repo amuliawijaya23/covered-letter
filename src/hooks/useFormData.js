@@ -87,7 +87,7 @@ const useFormData = () => {
 
   const generateIntroduction = async () => {
     try {
-      if (job && organization) {
+      if (job && organization && experience) {
         let prompt = `Write a cover letter opening paragraph for ${job} position at a company called ${organization}.`;
 
         if (culture) {

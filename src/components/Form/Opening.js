@@ -33,7 +33,7 @@ const Opening = ({
 
   let experienceOptions = [];
 
-  for (let i = 0; i <= 20; i++) {
+  for (let i = 1; i <= 20; i++) {
     experienceOptions.push(i);
   };
 
@@ -66,10 +66,12 @@ const Opening = ({
             id='select-experience'
             value={experience}
             label='Experience'
+            helperText='Optional'
             onChange={(e) => updateExperience(e.target.value)}
           >
+            <MenuItem value={'No Experience'}>No Experience</MenuItem>
             {experienceOptions.map((year) => (
-              year === 1 || year === 0 ? <MenuItem value={`${year} Year`}>{year} Year</MenuItem> : <MenuItem value={`${year} Years`}>{year} Years</MenuItem>
+              year === 1 ? <MenuItem value={`${year} Year`}>{year} Year</MenuItem> : <MenuItem value={`${year} Years`}>{year} Years</MenuItem>
             ))}
           </Select>
         </FormControl>

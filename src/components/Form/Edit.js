@@ -5,7 +5,6 @@ import { Box } from '@mui/material';
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, ContentState } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
-import draftToHtml from 'draftjs-to-html';
 
 import { useSelector } from 'react-redux';
 
