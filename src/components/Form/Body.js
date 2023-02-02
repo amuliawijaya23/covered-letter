@@ -7,9 +7,10 @@ import {
   TextField,
   Button,
   Card,
+  Divider,
   IconButton,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { useSelector } from 'react-redux';
@@ -27,67 +28,68 @@ const Body = ({
 
   return (
     <Grid container spacing={2} padding={1} sx={{ my: 2 }}>
-      <Grid item container>
         {values.map((value, index) => (
-           <>
-            <Grid item xs={12} lg={4}>
-              <TextField
-                fullWidth
-                variant='standard'
-                label='Core Value'
-                value={values[index]?.value}
-                onChange={(e) => updateValue(e.target.value, index)}
-                sx={{ my: 0.5 }}
-              />
-              <TextField
-                fullWidth
-                sx={{ my: 2 }}
-                placeholder='Provide your experience with this core value...'
-                value={values[index]?.feat}
-                onChange={(e) => updateFeat(e.target.value, index)}
-                multiline
-                rows={4}
-              />
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button 
-                  variant='contained'
-                  onClick={() => generateValueHighlight(index)}
+          <Grid item xs={12} lg={6}>
+            {values.length > 1 && (
+              <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                <IconButton
+                  edge='end'
+                  size='medium'
+                  color='inheirt'
+                  onClick={() => removeValue(index)}
                 >
-                  Generate
-                </Button>
-                {values.length > 1 && (
-                  <IconButton
-                    edge='end'
-                    size='medium'
-                    color='inheirt'
-                    onClick={() => removeValue(index)}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                )}
+                  <CloseIcon />
+                </IconButton>
               </Box>
-            </Grid>
-            <Grid item xs={12} lg={8} padding={2}>
-              {letter.body[index] && (
-                <Card sx={{ my: 2, p: 5, border: 'solid', height: '100%' }}>
+            )}
+            <TextField
+              fullWidth
+              variant='standard'
+              label='Core Value'
+              value={values[index]?.value}
+              onChange={(e) => updateValue(e.target.value, index)}
+              sx={{ my: 0.5 }}
+            />
+            <TextField
+              fullWidth
+              sx={{ my: 2 }}
+              placeholder='Provide your experience with this core value...'
+              value={values[index]?.feat}
+              onChange={(e) => updateFeat(e.target.value, index)}
+              multiline
+              rows={4}
+              />
+            <Divider>
+              <Button onClick={() => generateValueHighlight(index)}>
+                Generate
+              </Button>
+            </Divider>
+            {letter.body[index] && (
+                <Card sx={{ my: 2, p: 5, border: 'solid' }}>
                   <Typography component='span' variant='body2' >
                     {letter.body[index]}
                   </Typography>
                 </Card>
               )}
-           </Grid>
-          </>
+          </Grid>
         ))}
-      </Grid>
-      <Grid item xs={12} lg={4}>
-        <IconButton
-          size='medium'
-          color='inherit'
-          sx={{ mt: 2}}
-          onClick={addValue}
-        >
-          <AddIcon />
-        </IconButton>
+      <Grid item xs={12} lg={6}>
+        <Box sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <IconButton
+            size='large'
+            color='inherit'
+            sx={{ mt: 2 }}
+            onClick={addValue}
+          >
+            <AddCircleOutlineIcon color='primary' sx={{ fontSize: '5rem' }}/>
+          </IconButton>
+        </Box>
       </Grid>
     </Grid>
   )
