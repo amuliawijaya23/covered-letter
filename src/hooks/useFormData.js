@@ -94,6 +94,7 @@ const useFormData = () => {
     try {
       if (job && organization && experience) {
         
+        dispatch(updateOpening(''));
         setLoading(true);
 
         let prompt = `Write a cover letter opening paragraph for ${job} position at a company called ${organization}.`;

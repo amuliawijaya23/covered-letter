@@ -12,6 +12,8 @@ import {
   Select,
   MenuItem,
   Tooltip,
+  CircularProgress,
+  LinearProgress,
   Button,
   Card,
 } from '@mui/material';
@@ -29,6 +31,8 @@ const Opening = ({
   updateExperience,
   updateReason,
   generateIntroduction,
+  error,
+  loading
 }) => {
   const opening = useSelector((state) => state.letter.value.opening);
 
@@ -48,6 +52,7 @@ const Opening = ({
             variant='outlined'
             label='Job Title'
             helperText='Required'
+            error={error && !job}
             value={job}
             onChange={(e) => updateJob(e.target.value)}
           />
@@ -57,6 +62,7 @@ const Opening = ({
             variant='outlined'
             label='Organization Name'
             helperText='Required'
+            error={error && !organization}
             value={organization}
             onChange={(e) => updateOrganization(e.target.value)}
           />
@@ -68,8 +74,9 @@ const Opening = ({
             <Select
               labelId='select-experience-label'
               id='select-experience'
-              value={experience}
               label='Experience'
+              error={error && !experience}
+              value={experience}
               onChange={(e) => updateExperience(e.target.value)}
             >
               <MenuItem value={'No Experience'}>No Experience</MenuItem>
@@ -103,22 +110,27 @@ const Opening = ({
         </Grid>
         <Grid item xs={12} sx={{ mt: 2}}>
           <Divider>
-              {opening && (
-                <Tooltip title='Re - Generate'>
-                  <IconButton
-                    onClick={generateIntroduction}
-                  >
-                    <CachedIcon/>
-                  </IconButton>
-                </Tooltip>
-              )}
-              {!opening && (
-                <Button
+            {opening && (
+              <Tooltip title='Re - Generate'>
+                <IconButton
                   onClick={generateIntroduction}
                 >
-                  Generate
-                </Button>
-              )}
+                  <CachedIcon/>
+                </IconButton>
+              </Tooltip>
+            )}
+            {!opening && !loading && (
+              <Button
+                onClick={generateIntroduction}
+              >
+                Generate
+              </Button>
+            )}
+            {loading && (
+              <Box sx={{ width: '100%', mt: 1, justifyContent: 'center' }}>
+                <CircularProgress />
+              </Box>
+            )}
           </Divider>
         </Grid>
       </Grid>
