@@ -51,6 +51,7 @@ const Body = ({
               fullWidth
               variant='standard'
               label='Core Value'
+              error={error === index && !values[index]?.value}
               value={values[index]?.value}
               onChange={(e) => updateValue(e.target.value, index)}
               sx={{ my: 0.5 }}
@@ -59,6 +60,7 @@ const Body = ({
               fullWidth
               sx={{ my: 2 }}
               placeholder='Provide your experience with this core value...'
+              error={error === index && !values[index]?.feat}
               value={values[index]?.feat}
               onChange={(e) => updateFeat(e.target.value, index)}
               multiline

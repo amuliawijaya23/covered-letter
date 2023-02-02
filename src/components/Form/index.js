@@ -137,6 +137,7 @@ const Form = ({ open, handleClose }) => {
   const handleSave = async () => {
     const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
     await saveLetter(content);
+    handleClose();
   };
 
   return (
@@ -253,7 +254,7 @@ const Form = ({ open, handleClose }) => {
           ))}
         </Stepper>
       </Box>
-      <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={resetErrorAlert}>
+      <Snackbar open={error !== ''} autoHideDuration={6000} onClose={resetErrorAlert}>
         <Alert onClose={resetErrorAlert} severity='error' sx={{ width: '100%' }}>
           {error}
         </Alert>

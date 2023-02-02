@@ -20,10 +20,13 @@ export const letterSlice =  createSlice({
     },
     updateClosing: (state, action) => {
       state.value.closing = action.payload;
+    },
+    resetForm: (state, action) => {
+      state.value = initialState;
     }
   },
 });
 
-export const { updateOpening, updateBody, updateClosing } = letterSlice.actions;
+export const { updateOpening, updateBody, updateClosing, resetForm } = letterSlice.actions;
 
 export default letterSlice.reducer;

@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Configuration, OpenAIApi } from 'openai';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { updateOpening, updateBody, updateClosing } from '../state/reducers/letterReducer';
+import { updateOpening, updateBody, updateClosing, resetForm } from '../state/reducers/letterReducer';
 
 import { db } from '../firebase';
 import {
@@ -43,6 +43,26 @@ const useFormData = () => {
 
   const [ error, setError ] = useState('');
   const [ loading, setLoading ] = useState(false);
+
+  useState(() => {
+    return () => {
+      setTitle('');
+      setJob('');
+      setOrganization('');
+      setCulture('');
+      setExperience('');
+      setReason('');
+      setValues(
+        [
+          {
+            value: '',
+            feat: ''
+          }
+        ]
+      );
+      dispatch(resetForm());
+    };
+  }, [dispatch]);
 
   const resetErrorAlert = () => {
     setError('');
@@ -141,7 +161,6 @@ const useFormData = () => {
         };
 
         setError(errorMessage);
-        setLoading(false);
       }
     } catch (error) {
       console.error(error.response ? error.response.body : error);
@@ -198,6 +217,8 @@ const useFormData = () => {
         letterBody.splice(index, 0, response.data.choices[0].text.trim());
         dispatch(updateBody(letterBody));
         setLoading(false);
+      } else {
+        setError(index);
       }
     } catch (error) {
       setLoading(false);
