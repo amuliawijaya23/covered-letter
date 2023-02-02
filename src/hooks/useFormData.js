@@ -195,6 +195,8 @@ const useFormData = () => {
   const generateClosing = async () => {
     try {
       if (job && organization) {
+        setLoading(true);
+        dispatch(updateClosing(''));
         const response = await openAI.createCompletion({
           model: "text-davinci-003",
           prompt: `write a cover letter enclosure paragraph for ${job} position at a company called ${organization}. Signature line not required.`,
@@ -205,8 +207,10 @@ const useFormData = () => {
           presence_penalty: 0,
         });
         dispatch(updateClosing(response.data.choices[0].text.split('Sincerely,\n[Your Name]')[0].trim()));
+        setLoading(false);
       }
     } catch (error) {
+      setLoading(false);
       console.error(error.response ? error.response.body : error);
     }
   }

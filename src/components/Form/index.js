@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useState, useEffect } from 'react';
 
 // react redux
 import { useSelector } from 'react-redux';
@@ -26,11 +26,17 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import SaveIcon from '@mui/icons-material/Save';
 
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState, ContentState, convertToRaw } from 'draft-js';
+import htmlToDraft from 'html-to-draftjs';
+import draftToHtml from 'draftjs-to-html';
+
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 // import custom components
 import Opening from './Opening';
 import Body from './Body';
 import Closing from './Closing';
-import Edit from './Edit';
 
 // import custom hook
 import useFormData from '../../hooks/useFormData';
@@ -89,36 +95,47 @@ const Form = ({ open, handleClose }) => {
 
   const [step, setStep] = useState(0);
 
+  const [ editorState, setEditorState ] = useState(EditorState.createEmpty());
+
+  useEffect(() => {
+    let content = '';
+    if (letter?.opening && letter?.body.length > 0 && letter?.closing) {
+      content += `<p>To [Insert],</p>`;
+      content += `<p>${letter.opening}</p>`;
+      for (let i = 0; i < letter.body.length; i++) {
+        content += `<p>${letter.body[i]}</p>`;
+      };
+      content += `<p>${letter.closing}</p><p>Sincerely,</p><p>[Your Name]</p>`;
+
+      const contentBlock = htmlToDraft(content);
+      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+      const _editorState = EditorState.createWithContent(contentState);
+      setEditorState(_editorState);
+    };
+  }, [letter?.opening, letter?.body, letter?.closing]);
+
   const handleNext = () => {
     switch (step) {
-      case 0:
-        if (letter.opening) {
-          setStep((prev) => prev + 1);
-        };
-        break;
-
       case 1:
-        if (letter.body.length > 0) {
-          if (!letter.closing) {
-            generateClosing();
-          };
-          setStep((prev) => prev + 1);
+        if (!letter.closing) {
+          generateClosing();
         };
-        break;
-
-      case 2:
-        if (letter.closing) {
-          setStep((prev) => prev + 1);
-        };
+        setStep((prev) => prev + 1);
         break;
 
       default:
+        setStep((prev) => prev + 1);
         break;
     }
   };
 
   const handleBack = () => {
     setStep((prev) => prev - 1);
+  };
+
+  const handleSave = () => {
+    const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+    console.log(content);
   };
 
   return (
@@ -188,10 +205,17 @@ const Form = ({ open, handleClose }) => {
                 {step === 2 && (
                   <Closing 
                     generateClosing={generateClosing}
+                    loading={loading}
                   />
                 )}
-                {step === 3 && ( 
-                  <Edit />    
+                {step === 3 && (
+                  <Box sx={{ my: 2 }}>
+                    <Editor 
+                      defaultEditorState={editorState}
+                      editorState={editorState}
+                      onEditorStateChange={setEditorState}
+                    />
+                  </Box> 
                 )}
                 <Box sx={{ display: 'flex', justifyContent: 'end', px: 2 }}>
                   {step > 0 && (
@@ -217,6 +241,7 @@ const Form = ({ open, handleClose }) => {
                     <Button 
                       variant='contained' 
                       endIcon={<SaveIcon />}
+                      onClick={handleSave}
                     >
                       Save
                     </Button>

@@ -34,7 +34,7 @@ const Body = ({
   return (
     <Grid container spacing={2} padding={1} sx={{ my: 2 }}>
         {values.map((value, index) => (
-          <Grid item xs={12} lg={6}>
+          <Grid item xs={12} lg={6} padding={1}>
             {values.length > 1 && (
               <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
                 <IconButton
@@ -96,7 +96,7 @@ const Body = ({
               )}
           </Grid>
         ))}
-      <Grid item xs={12} lg={6}>
+      <Grid item xs={12} lg={6} padding={1}>
         <Box sx={{
           width: '100%',
           height: '100%',

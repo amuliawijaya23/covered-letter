@@ -137,9 +137,9 @@ const Opening = ({
         {opening && (
           <Card sx={{ my: 2, p: 5, border: 'solid', display: 'flex', justifyContent: 'center' }}>
             <Box sx={{ width: { xs: '100%', lg: '75%'}  }}>
-            <Typography component='span' variant='body2' >
-              {opening}
-            </Typography>
+              <Typography component='span' variant='body2' >
+                {opening}
+              </Typography>
             </Box>
           </Card>          
         )}
