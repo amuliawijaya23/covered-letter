@@ -18,6 +18,8 @@ import {
   Typography,
   TextField,
   Button,
+  Snackbar,
+  Alert
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -71,6 +73,7 @@ const Form = ({ open, handleClose }) => {
     generateIntroduction,
     generateValueHighlight,
     generateClosing,
+    resetErrorAlert,
     title,
     job,
     organization,
@@ -79,6 +82,7 @@ const Form = ({ open, handleClose }) => {
     reason,
     values,
     error,
+    loading
   } = useFormData();
 
   const letter = useSelector((state) => state.letter.value);
@@ -159,6 +163,8 @@ const Form = ({ open, handleClose }) => {
                     culture={culture}
                     experience={experience}
                     reason={reason}
+                    error={error}
+                    loading={loading}
                     updateJob={updateJob}
                     updateOrganization={updateOrganization}
                     updateCulture={updateCulture}
@@ -219,6 +225,11 @@ const Form = ({ open, handleClose }) => {
           ))}
         </Stepper>
       </Box>
+      <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={resetErrorAlert}>
+        <Alert onClose={resetErrorAlert} severity='error' sx={{ width: '100%' }}>
+          {error}
+        </Alert>
+      </Snackbar>
     </Dialog>
   )
 }

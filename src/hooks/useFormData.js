@@ -31,6 +31,11 @@ const useFormData = () => {
   );
 
   const [ error, setError ] = useState('');
+  const [ loading, setLoading ] = useState(false);
+
+  const resetErrorAlert = () => {
+    setError('');
+  };
 
   const updateTitle = (input) => {
     setTitle(input);
@@ -88,6 +93,9 @@ const useFormData = () => {
   const generateIntroduction = async () => {
     try {
       if (job && organization && experience) {
+        
+        setLoading(true);
+
         let prompt = `Write a cover letter opening paragraph for ${job} position at a company called ${organization}.`;
 
         if (culture) {
@@ -114,8 +122,42 @@ const useFormData = () => {
           presence_penalty: 0,
         });
         dispatch(updateOpening(response.data.choices[0].text.trim()));
+        setLoading(false);
       } else {
-        setError('Missing required information.');
+
+        const reqFields = [
+          {
+            name: 'Job Title', 
+            filled: Boolean(job)
+          },
+          {
+            name: 'Organization Name', 
+            filled: Boolean(organization)
+          },
+          {
+            name: 'Experience', 
+            filled: Boolean(experience)
+          },
+        ];
+
+        const missingFields = reqFields.filter((field) => !field.filled );
+
+        let errorMessage = 'Unable to generate introduction. ';
+
+        if (missingFields.length === 1) {
+          errorMessage += `${missingFields[0].name} is a required information.`;
+        };
+
+        if (missingFields.length === 2) {
+          errorMessage += `${missingFields[0].name} and ${missingFields[1].name} are required information.`;
+        };
+
+        if (missingFields.length === 3) {
+          errorMessage += `${missingFields[0].name}, ${missingFields[1].name} and ${missingFields[2].name} are required information.`
+        };
+
+        setError(errorMessage);
+        setLoading(false);
       }
     } catch (error) {
       console.error(error.response ? error.response.body : error);
@@ -177,6 +219,7 @@ const useFormData = () => {
     generateIntroduction,
     generateValueHighlight,
     generateClosing,
+    resetErrorAlert,
     title,
     job,
     organization,
@@ -185,6 +228,7 @@ const useFormData = () => {
     reason,
     values,
     error,
+    loading
   };
 };
 

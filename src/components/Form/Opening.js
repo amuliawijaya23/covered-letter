@@ -15,9 +15,7 @@ import {
   Button,
   Card,
 } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import CachedIcon from '@mui/icons-material/Cached';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Opening = ({ 
   job,
@@ -107,13 +105,17 @@ const Opening = ({
           <Divider>
               {opening && (
                 <Tooltip title='Re - Generate'>
-                  <IconButton>
+                  <IconButton
+                    onClick={generateIntroduction}
+                  >
                     <CachedIcon/>
                   </IconButton>
                 </Tooltip>
               )}
               {!opening && (
-                <Button>
+                <Button
+                  onClick={generateIntroduction}
+                >
                   Generate
                 </Button>
               )}
