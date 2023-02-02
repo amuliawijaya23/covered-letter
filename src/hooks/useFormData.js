@@ -253,8 +253,17 @@ const useFormData = () => {
   const saveLetter = async (contentInHtml) => {
     try {
       if (title && job && organization && user.uid && contentInHtml) {
-        const letterRef = collection(db, 'letters');
-        await addDoc(letterRef, {
+        const lettersRef = collection(db, 'letters');
+        const featsRef = collection(db, 'feats');
+        Promise.all(values.map( async (value, index) => await addDoc(featsRef, {
+          value: value.value,
+          feat: value.feat,
+          content: letter.body[index],
+          user_id: user.uid,
+          date_created: new Date(),
+          date_updated: new Date()
+        })));
+        await addDoc(lettersRef, {
           name: title,
           content: contentInHtml,
           job_title: job,
