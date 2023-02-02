@@ -196,7 +196,7 @@ const Form = ({ open, handleClose }) => {
                       Back
                     </Button>
                   )}
-                  {step < 3 && (
+                  {( (step === 0 && letter?.opening) || (step === 1 && letter?.body.length > 0) || (step === 2 && letter?.closing) ) && (
                     <Button 
                       variant='contained' 
                       endIcon={<NavigateNextIcon />}
