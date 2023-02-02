@@ -4,8 +4,18 @@ import { useState } from 'react';
 import { Configuration, OpenAIApi } from 'openai';
 
 import { useSelector, useDispatch } from 'react-redux';
-
 import { updateOpening, updateBody, updateClosing } from '../state/reducers/letterReducer';
+
+import { db } from '../firebase';
+import {
+  collection,
+  query,
+  where,
+  addDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 
 const useFormData = () => {
   const config = new Configuration({ apiKey: process.env.REACT_APP_OPENAI_API_KEY });
@@ -14,6 +24,7 @@ const useFormData = () => {
   // global state
   const dispatch = useDispatch();
   const letter = useSelector((state) => state.letter.value);
+  const user = useSelector((state) => state.user.value);
 
   const [ title, setTitle ] = useState('');
   const [ job, setJob ] = useState('');
@@ -37,6 +48,7 @@ const useFormData = () => {
     setError('');
   };
 
+  // Opening section
   const updateTitle = (input) => {
     setTitle(input);
   };
@@ -59,35 +71,6 @@ const useFormData = () => {
 
   const updateReason = (input) => {
     setReason(input);
-  };
-
-  const updateValue = (input, index) => {
-    const newValues = [ ...values ];
-    newValues[index] = { ...newValues[index], value: input };
-    setValues(newValues);
-  };
-
-  const updateFeat = (input, index) => {
-    const newValues = [ ...values ];
-    newValues[index] = { ...newValues[index], feat: input };
-    setValues(newValues);
-  };
-
-  const addValue = () => {
-    const newValues = [ ...values ];
-    newValues.push({ value: '', feat: ''});
-    setValues(newValues);
-  };
-
-  const removeValue = (index) => {
-    if (values.length > 1) {
-      const newValues = [ ...values ];
-      newValues.splice(index, 1);
-      const letterBody = [ ...letter.body ];
-      letterBody.splice(index, 1);
-      setValues(newValues);
-      dispatch(updateBody(letterBody));
-    };
   };
 
   const generateIntroduction = async () => {
@@ -165,6 +148,36 @@ const useFormData = () => {
     }
   };
 
+  // Body Section
+  const updateValue = (input, index) => {
+    const newValues = [ ...values ];
+    newValues[index] = { ...newValues[index], value: input };
+    setValues(newValues);
+  };
+
+  const updateFeat = (input, index) => {
+    const newValues = [ ...values ];
+    newValues[index] = { ...newValues[index], feat: input };
+    setValues(newValues);
+  };
+
+  const addValue = () => {
+    const newValues = [ ...values ];
+    newValues.push({ value: '', feat: ''});
+    setValues(newValues);
+  };
+
+  const removeValue = (index) => {
+    if (values.length > 1) {
+      const newValues = [ ...values ];
+      newValues.splice(index, 1);
+      const letterBody = [ ...letter.body ];
+      letterBody.splice(index, 1);
+      setValues(newValues);
+      dispatch(updateBody(letterBody));
+    };
+  };
+
   const generateValueHighlight = async (index) => {
     try {
       if (values[index].value && values[index].feat) {
@@ -192,6 +205,7 @@ const useFormData = () => {
     }
   };
 
+  // Closing Section
   const generateClosing = async () => {
     try {
       if (job && organization) {
@@ -213,7 +227,26 @@ const useFormData = () => {
       setLoading(false);
       console.error(error.response ? error.response.body : error);
     }
-  }
+  };
+
+  const saveLetter = async (contentInHtml) => {
+    try {
+      if (title && job && organization && user.uid && contentInHtml) {
+        const letterRef = collection(db, 'letters');
+        await addDoc(letterRef, {
+          name: title,
+          content: contentInHtml,
+          job_title: job,
+          organization_name: organization,
+          user_id: user.uid,
+          date_created: new Date(),
+          date_updated: new Date()
+        });
+      }
+    } catch (error) {
+      console.error(error.response ? error.response.bdy : error);
+    }
+  };
 
   return {
     updateTitle,
@@ -230,6 +263,7 @@ const useFormData = () => {
     generateValueHighlight,
     generateClosing,
     resetErrorAlert,
+    saveLetter,
     title,
     job,
     organization,

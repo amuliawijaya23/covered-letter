@@ -80,6 +80,7 @@ const Form = ({ open, handleClose }) => {
     generateValueHighlight,
     generateClosing,
     resetErrorAlert,
+    saveLetter,
     title,
     job,
     organization,
@@ -133,9 +134,9 @@ const Form = ({ open, handleClose }) => {
     setStep((prev) => prev - 1);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-    console.log(content);
+    await saveLetter(content);
   };
 
   return (
