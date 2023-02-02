@@ -44,7 +44,7 @@ const useFormData = () => {
   const [ error, setError ] = useState('');
   const [ loading, setLoading ] = useState(false);
 
-  useState(() => {
+  useEffect(() => {
     return () => {
       setTitle('');
       setJob('');
