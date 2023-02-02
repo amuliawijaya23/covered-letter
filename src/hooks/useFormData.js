@@ -168,6 +168,10 @@ const useFormData = () => {
   const generateValueHighlight = async (index) => {
     try {
       if (values[index].value && values[index].feat) {
+        setLoading(index);
+        const newBody = [ ...letter.body ];
+        newBody.splice(index, 1);
+        dispatch(updateBody(newBody));
         const response = await openAI.createCompletion({
           model: "text-davinci-003",
           prompt: `write a cover letter paragraph highlighting my ${values[index].value} ability through the following experiences: ${values[index].feat}.`,
@@ -177,12 +181,13 @@ const useFormData = () => {
           frequency_penalty: 0,
           presence_penalty: 0,
         });
-        const newBody = [ ...letter.body ];
-        newBody[index] = response.data.choices[0].text.trim();
-        console.log('body', newBody);
-        dispatch(updateBody(newBody));
+        const letterBody = [...newBody];
+        letterBody.splice(index, 0, response.data.choices[0].text.trim());
+        dispatch(updateBody(letterBody));
+        setLoading(false);
       }
     } catch (error) {
+      setLoading(false);
       console.error(error.response ? error.response.body : error);
     }
   };

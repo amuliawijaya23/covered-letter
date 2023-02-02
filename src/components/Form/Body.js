@@ -9,8 +9,11 @@ import {
   Card,
   Divider,
   IconButton,
+  Tooltip,
+  CircularProgress,
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import CachedIcon from '@mui/icons-material/Cached';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { useSelector } from 'react-redux';
@@ -21,7 +24,9 @@ const Body = ({
   updateFeat,
   addValue,
   removeValue,
-  generateValueHighlight
+  generateValueHighlight,
+  loading,
+  error
 }) => {
 
   const letter = useSelector((state) => state.letter.value);
@@ -60,9 +65,27 @@ const Body = ({
               rows={4}
               />
             <Divider>
+              {letter.body[index] && (
+                <Tooltip
+                  title='Re - Generate'
+                >
+                  <IconButton
+                    onClick={() => generateValueHighlight(index)}
+                  >
+                    <CachedIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
+              {(!letter.body[index] && (loading === false)) && (
               <Button onClick={() => generateValueHighlight(index)}>
                 Generate
               </Button>
+              )}
+              {loading === index && (
+                <Box sx={{ width: '100%', mt: 1, justifyContent: 'center' }}>
+                  <CircularProgress />
+                </Box>
+              )}
             </Divider>
             {letter.body[index] && (
                 <Card sx={{ my: 2, p: 5, border: 'solid' }}>
@@ -87,7 +110,7 @@ const Body = ({
             sx={{ mt: 2 }}
             onClick={addValue}
           >
-            <AddCircleOutlineIcon color='primary' sx={{ fontSize: '5rem' }}/>
+            <AddCircleOutlineIcon color='primary' sx={{ fontSize: '4rem' }}/>
           </IconButton>
         </Box>
       </Grid>

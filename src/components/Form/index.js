@@ -176,6 +176,8 @@ const Form = ({ open, handleClose }) => {
                 {step === 1 && (
                   <Body 
                     values={values}
+                    error={error}
+                    loading={loading}
                     updateValue={updateValue}
                     updateFeat={updateFeat}
                     generateValueHighlight={generateValueHighlight}
