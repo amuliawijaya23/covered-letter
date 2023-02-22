@@ -1,6 +1,16 @@
-import React from 'react'
+import PropTypes from 'prop-types';
 
-import { Grid, IconButton, Card, Typography, Divider, Box, CircularProgress, Button, Tooltip } from '@mui/material';
+import {
+  Grid,
+  IconButton,
+  Card,
+  Typography,
+  Divider,
+  Box,
+  CircularProgress,
+  Button,
+  Tooltip
+} from '@mui/material';
 import CachedIcon from '@mui/icons-material/Cached';
 
 import { useSelector } from 'react-redux';
@@ -14,20 +24,12 @@ const Closing = ({ generateClosing, loading }) => {
         <Divider>
           {closing && (
             <Tooltip title='Re - Generate'>
-              <IconButton
-                onClick={generateClosing}
-              >
-                <CachedIcon/>
+              <IconButton onClick={generateClosing}>
+                <CachedIcon />
               </IconButton>
             </Tooltip>
           )}
-          {!closing && !loading && (
-            <Button
-              onClick={generateClosing}
-            >
-              Generate
-            </Button>
-          )}
+          {!closing && !loading && <Button onClick={generateClosing}>Generate</Button>}
           {loading && (
             <Box sx={{ width: '100%', mt: 1, justifyContent: 'center' }}>
               <CircularProgress />
@@ -36,8 +38,8 @@ const Closing = ({ generateClosing, loading }) => {
         </Divider>
         {closing && (
           <Card sx={{ my: 2, p: 5, border: 'solid', display: 'flex', justifyContent: 'center' }}>
-            <Box sx={{ width: { xs: '100%', lg: '75%'}  }}>
-              <Typography component='span' variant='body2' >
+            <Box sx={{ width: { xs: '100%', lg: '75%' } }}>
+              <Typography component='span' variant='body2'>
                 {closing}
               </Typography>
             </Box>
@@ -45,7 +47,12 @@ const Closing = ({ generateClosing, loading }) => {
         )}
       </Grid>
     </Grid>
-  )
-}
+  );
+};
 
-export default Closing
+Closing.propTypes = {
+  generateClosing: PropTypes.func,
+  loading: PropTypes.bool
+};
+
+export default Closing;

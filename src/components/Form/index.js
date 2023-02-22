@@ -4,7 +4,7 @@ import { forwardRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 // import from MUI
-import { 
+import {
   Box,
   Dialog,
   Slide,
@@ -26,12 +26,12 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import SaveIcon from '@mui/icons-material/Save';
 
-import { Editor } from "react-draft-wysiwyg";
+import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
 
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 // import custom components
 import Opening from './Opening';
@@ -42,7 +42,7 @@ import Closing from './Closing';
 import useFormData from '../../hooks/useFormData';
 
 const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction='up' ref={ref} {...props} />;
 });
 
 const steps = [
@@ -65,7 +65,7 @@ const steps = [
 ];
 
 const Form = ({ open, handleClose }) => {
-  const { 
+  const {
     updateTitle,
     updateJob,
     updateOrganization,
@@ -96,7 +96,7 @@ const Form = ({ open, handleClose }) => {
 
   const [step, setStep] = useState(0);
 
-  const [ editorState, setEditorState ] = useState(EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   useEffect(() => {
     let content = '';
@@ -105,14 +105,14 @@ const Form = ({ open, handleClose }) => {
       content += `<p>${letter.opening}</p>`;
       for (let i = 0; i < letter.body.length; i++) {
         content += `<p>${letter.body[i]}</p>`;
-      };
+      }
       content += `<p>${letter.closing}</p><p>Sincerely,</p><p>[Your Name]</p>`;
 
       const contentBlock = htmlToDraft(content);
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       const _editorState = EditorState.createWithContent(contentState);
       setEditorState(_editorState);
-    };
+    }
   }, [letter?.opening, letter?.body, letter?.closing]);
 
   const handleNext = () => {
@@ -120,7 +120,7 @@ const Form = ({ open, handleClose }) => {
       case 1:
         if (!letter.closing) {
           generateClosing();
-        };
+        }
         setStep((prev) => prev + 1);
         break;
 
@@ -141,14 +141,9 @@ const Form = ({ open, handleClose }) => {
   };
 
   return (
-    <Dialog
-      fullScreen={true}
-      open={open}
-      onClose={handleClose}
-      TransitionComponent={Transition}
-    >
+    <Dialog fullScreen={true} open={open} onClose={handleClose} TransitionComponent={Transition}>
       <AppBar sx={{ position: 'relative' }}>
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <TextField
             onChange={(e) => updateTitle(e.target.value)}
             value={title}
@@ -156,12 +151,7 @@ const Form = ({ open, handleClose }) => {
             sx={{ width: 300 }}
             variant='standard'
           />
-          <IconButton
-            edge='start'
-            color='inheirt'
-            onClick={handleClose}
-            aria-label='close'
-          >
+          <IconButton edge='start' color='inheirt' onClick={handleClose} aria-label='close'>
             <CloseIcon />
           </IconButton>
         </Toolbar>
@@ -193,7 +183,7 @@ const Form = ({ open, handleClose }) => {
                   />
                 )}
                 {step === 1 && (
-                  <Body 
+                  <Body
                     values={values}
                     error={error}
                     loading={loading}
@@ -204,20 +194,15 @@ const Form = ({ open, handleClose }) => {
                     removeValue={removeValue}
                   />
                 )}
-                {step === 2 && (
-                  <Closing 
-                    generateClosing={generateClosing}
-                    loading={loading}
-                  />
-                )}
+                {step === 2 && <Closing generateClosing={generateClosing} loading={loading} />}
                 {step === 3 && (
                   <Box sx={{ my: 2 }}>
-                    <Editor 
+                    <Editor
                       defaultEditorState={editorState}
                       editorState={editorState}
                       onEditorStateChange={setEditorState}
                     />
-                  </Box> 
+                  </Box>
                 )}
                 <Box sx={{ display: 'flex', justifyContent: 'end', px: 2 }}>
                   {step > 0 && (
@@ -225,26 +210,19 @@ const Form = ({ open, handleClose }) => {
                       variant='contained'
                       startIcon={<NavigateBeforeIcon />}
                       onClick={handleBack}
-                      sx={{ mr: 1}}
-                    >
+                      sx={{ mr: 1 }}>
                       Back
                     </Button>
                   )}
-                  {( (step === 0 && letter?.opening) || (step === 1 && letter?.body.length > 0) || (step === 2 && letter?.closing) ) && (
-                    <Button 
-                      variant='contained' 
-                      endIcon={<NavigateNextIcon />}
-                      onClick={handleNext}
-                    >
+                  {((step === 0 && letter?.opening) ||
+                    (step === 1 && letter?.body.length > 0) ||
+                    (step === 2 && letter?.closing)) && (
+                    <Button variant='contained' endIcon={<NavigateNextIcon />} onClick={handleNext}>
                       Next
                     </Button>
                   )}
                   {step === 3 && (
-                    <Button 
-                      variant='contained' 
-                      endIcon={<SaveIcon />}
-                      onClick={handleSave}
-                    >
+                    <Button variant='contained' endIcon={<SaveIcon />} onClick={handleSave}>
                       Save
                     </Button>
                   )}
@@ -260,7 +238,7 @@ const Form = ({ open, handleClose }) => {
         </Alert>
       </Snackbar>
     </Dialog>
-  )
-}
+  );
+};
 
-export default Form
+export default Form;

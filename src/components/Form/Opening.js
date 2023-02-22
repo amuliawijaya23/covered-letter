@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { 
+import {
   Grid,
   Box,
   IconButton,
@@ -14,11 +14,11 @@ import {
   Tooltip,
   CircularProgress,
   Button,
-  Card,
+  Card
 } from '@mui/material';
 import CachedIcon from '@mui/icons-material/Cached';
 
-const Opening = ({ 
+const Opening = ({
   job,
   organization,
   culture,
@@ -39,7 +39,7 @@ const Opening = ({
 
   for (let i = 1; i <= 20; i++) {
     experienceOptions.push(i);
-  };
+  }
 
   return (
     <Grid container spacing={2} padding={1}>
@@ -65,10 +65,7 @@ const Opening = ({
             value={organization}
             onChange={(e) => updateOrganization(e.target.value)}
           />
-          <FormControl
-            fullWidth
-            sx={{ my: 1 }}
-          >
+          <FormControl fullWidth sx={{ my: 1 }}>
             <InputLabel id='select-experience-label'>Experience</InputLabel>
             <Select
               labelId='select-experience-label'
@@ -76,12 +73,15 @@ const Opening = ({
               label='Experience'
               error={error && !experience}
               value={experience}
-              onChange={(e) => updateExperience(e.target.value)}
-            >
+              onChange={(e) => updateExperience(e.target.value)}>
               <MenuItem value={'No Experience'}>No Experience</MenuItem>
-                {experienceOptions.map((year) => (
-                  year === 1 ? <MenuItem value={`${year} Year`}>{year} Year</MenuItem> : <MenuItem value={`${year} Years`}>{year} Years</MenuItem>
-                ))}
+              {experienceOptions.map((year) =>
+                year === 1 ? (
+                  <MenuItem value={`${year} Year`}>{year} Year</MenuItem>
+                ) : (
+                  <MenuItem value={`${year} Years`}>{year} Years</MenuItem>
+                )
+              )}
             </Select>
           </FormControl>
         </Grid>
@@ -107,24 +107,16 @@ const Opening = ({
             rows={3}
           />
         </Grid>
-        <Grid item xs={12} sx={{ mt: 2}}>
+        <Grid item xs={12} sx={{ mt: 2 }}>
           <Divider>
             {opening && (
               <Tooltip title='Re - Generate'>
-                <IconButton
-                  onClick={generateIntroduction}
-                >
-                  <CachedIcon/>
+                <IconButton onClick={generateIntroduction}>
+                  <CachedIcon />
                 </IconButton>
               </Tooltip>
             )}
-            {!opening && !loading && (
-              <Button
-                onClick={generateIntroduction}
-              >
-                Generate
-              </Button>
-            )}
+            {!opening && !loading && <Button onClick={generateIntroduction}>Generate</Button>}
             {loading && (
               <Box sx={{ width: '100%', mt: 1, justifyContent: 'center' }}>
                 <CircularProgress />
@@ -133,19 +125,19 @@ const Opening = ({
           </Divider>
         </Grid>
       </Grid>
-      <Grid item xs={12} padding={2} sx={{ display: 'flex', height: '100%'}}>
+      <Grid item xs={12} padding={2} sx={{ display: 'flex', height: '100%' }}>
         {opening && (
           <Card sx={{ my: 2, p: 5, border: 'solid', display: 'flex', justifyContent: 'center' }}>
-            <Box sx={{ width: { xs: '100%', lg: '75%'}  }}>
-              <Typography component='span' variant='body2' >
+            <Box sx={{ width: { xs: '100%', lg: '75%' } }}>
+              <Typography component='span' variant='body2'>
                 {opening}
               </Typography>
             </Box>
-          </Card>          
+          </Card>
         )}
       </Grid>
     </Grid>
-  )
-}
+  );
+};
 
-export default Opening
+export default Opening;

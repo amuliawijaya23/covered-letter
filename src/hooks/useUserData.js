@@ -3,23 +3,25 @@ import { useDispatch } from 'react-redux';
 import { auth, googleProvider } from '../firebase';
 import { signInWithPopup, signOut } from 'firebase/auth';
 
+import { db } from '../firebase';
+import { onSnapshot, collection } from 'firebase/firestore';
+
 // user reducer
 import { login, logout } from '../state/reducers/userReducer';
 
 const useUserData = () => {
-
   const dispatch = useDispatch();
 
   useEffect(() => {
-		const userData = JSON.parse(localStorage.getItem('user'));
-		if (userData) {
-			dispatch(login(userData));
-		};
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if (userData) {
+      dispatch(login(userData));
+    }
 
-		return () => {
-			dispatch(logout());
-		};
-	}, [dispatch]);
+    return () => {
+      dispatch(logout());
+    };
+  }, [dispatch]);
 
   const signInWithGoogle = async () => {
     try {
@@ -29,7 +31,7 @@ const useUserData = () => {
       // navigate('/');
     } catch (error) {
       console.error(error.response ? error.response.body : error);
-    };
+    }
   };
 
   const signOutUser = async () => {
@@ -39,7 +41,7 @@ const useUserData = () => {
       localStorage.clear('user');
     } catch (error) {
       console.error(error.response ? error.response.body : error);
-    };
+    }
   };
 
   return {
@@ -48,4 +50,4 @@ const useUserData = () => {
   };
 };
 
-export default useUserData
+export default useUserData;

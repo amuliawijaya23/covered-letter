@@ -1,3 +1,5 @@
+import React from 'react';
+
 // react-router
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -15,7 +17,6 @@ import Navigation from './components/Navigation';
 
 // import custom hook
 import useUserData from './hooks/useUserData';
-
 
 const App = () => {
   const { signInWithGoogle, signOutUser } = useUserData();
@@ -36,6 +37,6 @@ const App = () => {
       </Box>
     </Router>
   );
-}
+};
 
 export default App;

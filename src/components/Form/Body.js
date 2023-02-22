@@ -1,5 +1,3 @@
-import React from 'react';
-
 import PropTypes from 'prop-types';
 
 import {
@@ -12,7 +10,7 @@ import {
   Divider,
   IconButton,
   Tooltip,
-  CircularProgress,
+  CircularProgress
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CachedIcon from '@mui/icons-material/Cached';
@@ -30,7 +28,6 @@ const Body = ({
   loading,
   error
 }) => {
-
   const letter = useSelector((state) => state.letter.value);
 
   return (
@@ -43,8 +40,7 @@ const Body = ({
                 edge='end'
                 size='medium'
                 color='inheirt'
-                onClick={() => removeValue(index)}
-              >
+                onClick={() => removeValue(index)}>
                 <CloseIcon />
               </IconButton>
             </Box>
@@ -70,20 +66,14 @@ const Body = ({
           />
           <Divider>
             {letter.body[index] && (
-              <Tooltip
-                title='Re - Generate'
-              >
-                <IconButton
-                  onClick={() => generateValueHighlight(index)}
-                >
+              <Tooltip title='Re - Generate'>
+                <IconButton onClick={() => generateValueHighlight(index)}>
                   <CachedIcon />
                 </IconButton>
               </Tooltip>
             )}
-            {(!letter.body[index] && (loading === false)) && (
-              <Button onClick={() => generateValueHighlight(index)}>
-                Generate
-              </Button>
+            {!letter.body[index] && loading === false && (
+              <Button onClick={() => generateValueHighlight(index)}>Generate</Button>
             )}
             {loading === index && (
               <Box sx={{ width: '100%', mt: 1, justifyContent: 'center' }}>
@@ -93,7 +83,7 @@ const Body = ({
           </Divider>
           {letter.body[index] && (
             <Card sx={{ my: 2, p: 5, border: 'solid' }}>
-              <Typography component='span' variant='body2' >
+              <Typography component='span' variant='body2'>
                 {letter.body[index]}
               </Typography>
             </Card>
@@ -101,20 +91,16 @@ const Body = ({
         </Grid>
       ))}
       <Grid item xs={12} lg={6} padding={1}>
-        <Box sx={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          <IconButton
-            size='large'
-            color='inherit'
-            sx={{ mt: 2 }}
-            onClick={addValue}
-          >
-            <AddCircleOutlineIcon color='primary' sx={{ fontSize: '4rem' }}/>
+        <Box
+          sx={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+          <IconButton size='large' color='inherit' sx={{ mt: 2 }} onClick={addValue}>
+            <AddCircleOutlineIcon color='primary' sx={{ fontSize: '4rem' }} />
           </IconButton>
         </Box>
       </Grid>
