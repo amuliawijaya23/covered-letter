@@ -19,10 +19,16 @@ import {
   TableSortLabel,
   TableRow,
   TableCell,
-  TablePagination
+  TablePagination,
+  Popover,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 // import custom component
 import Form from '../../components/Form';
@@ -42,6 +48,7 @@ const Dashboard = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchBar, setSearchBar] = useState(false);
   const [search, setSearch] = useState('');
+  const [menu, setMenu] = useState(null);
 
   const rowCount = 0;
 
@@ -91,9 +98,27 @@ const Dashboard = () => {
           {letter.organization_name}
         </TableCell>
         <TableCell align='right' padding='normal'>
-          {formatDistanceToNow(fromUnixTime(letter.date_created), {
-            addSuffix: true
-          })}
+          <IconButton>
+            <MoreVertIcon onClick={(e) => setMenu(e.currentTarget)} />
+          </IconButton>
+          <Popover
+            open={Boolean(menu)}
+            anchorEl={menu}
+            onClose={() => setMenu(null)}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemText primary='Edit' primaryTypographyProps={{ variant: 'body2' }} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemText primary='Delete' primaryTypographyProps={{ variant: 'body2' }} />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </Popover>
         </TableCell>
       </TableRow>
     ));
@@ -149,11 +174,11 @@ const Dashboard = () => {
             <Table stickyHeader aria-label='collapsible table' size='small'>
               <TableHead>
                 <TableRow>
-                  {['date_updated', 'name', 'job_title', 'organization', 'date_created'].map(
+                  {['date_updated', 'name', 'job_title', 'organization', 'actions'].map(
                     (column) => (
                       <TableCell
                         key={column}
-                        align={column === 'date_created' ? 'right' : 'left'}
+                        align={column === 'actions' ? 'right' : 'left'}
                         padding='normal'
                         sortDirection={orderBy === column ? order : false}>
                         <TableSortLabel
