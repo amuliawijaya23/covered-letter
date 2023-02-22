@@ -27,7 +27,7 @@ const Navigation = ({ logout }) => {
   const navigate = useNavigate();
 
   // global state
-  const user = useSelector((state) => state.user.value);
+  const user = useSelector((state) => state.user.data);
 
   // local state
   const [menuAnchor, setMenuAnchor] = useState(null);
