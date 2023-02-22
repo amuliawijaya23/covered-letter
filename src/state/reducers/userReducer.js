@@ -11,14 +11,20 @@ export const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     login: (state, action) => {
-      state.value = action.payload;
+      state.data = action.payload;
+    },
+    setFeats: (state, action) => {
+      state.feats = action.payload;
+    },
+    setLetters: (state, action) => {
+      state.letters = action.payload;
     },
     logout: (state, action) => {
-      state.value = initialState;
+      state = initialState;
     }
   }
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, setFeats, setLetters, logout } = userSlice.actions;
 
 export default userSlice.reducer;

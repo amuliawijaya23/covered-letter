@@ -1,13 +1,17 @@
 import { useEffect } from 'react';
+
 import { useDispatch } from 'react-redux';
+// user reducer
+import { login, logout, setFeats, setLetters } from '../state/reducers/userReducer';
+
 import { auth, googleProvider } from '../firebase';
 import { signInWithPopup, signOut } from 'firebase/auth';
 
 import { db } from '../firebase';
-import { onSnapshot, collection } from 'firebase/firestore';
+import { onSnapshot, collection, query, where } from 'firebase/firestore';
 
-// user reducer
-import { login, logout } from '../state/reducers/userReducer';
+const lettersRef = collection(db, 'letters');
+const featsRef = collection(db, 'feats');
 
 const useUserData = () => {
   const dispatch = useDispatch();
@@ -16,6 +20,34 @@ const useUserData = () => {
     const userData = JSON.parse(localStorage.getItem('user'));
     if (userData) {
       dispatch(login(userData));
+
+      const myFeats = query(featsRef, where('user_id', '==', userData.uid));
+      const myLetters = query(lettersRef, where('user_id', '==', userData.uid));
+
+      onSnapshot(myFeats, (snapshot) => {
+        const feats = snapshot.docs
+          .map((f) => ({
+            ...f.data(),
+            id: f.id,
+            date_created: f.data().date_created.seconds,
+            date_updated: f.data().date_updated.seconds
+          }))
+          .sort((a, b) => b.date_created - a.date_created);
+
+        dispatch(setFeats(feats));
+      });
+
+      onSnapshot(myLetters, (snapshot) => {
+        const letters = snapshot.docs
+          .map((l) => ({
+            ...l.data(),
+            id: l.id,
+            date_created: l.data().date_created.seconds,
+            date_updated: l.data().date_updated.seconds
+          }))
+          .sort((a, b) => b.date_created - a.date_created);
+        dispatch(setLetters(letters));
+      });
     }
 
     return () => {
